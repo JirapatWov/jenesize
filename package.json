@@ -2,6 +2,7 @@
   "name": "jenosize-affiliate-platform",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@10.22.0",
   "scripts": {
     "dev": "pnpm --parallel --filter \"./apps/*\" dev",
     "dev:api": "pnpm --filter api dev",
