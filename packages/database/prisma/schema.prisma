@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  password      String
+  refreshToken  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Product {
+  id        String   @id @default(cuid())
+  title     String
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  offers Offer[]
+  links  Link[]
+
+  @@map("products")
+}
+
+enum Marketplace {
+  LAZADA
+  SHOPEE
+}
+
+model Offer {
+  id            String      @id @default(cuid())
+  productId     String
+  marketplace   Marketplace
+  storeName     String
+  price         Float
+  currency      String      @default("THB")
+  externalUrl   String
+  externalId    String
+  lastCheckedAt DateTime    @default(now())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, marketplace])
+  @@index([productId])
+  @@map("offers")
+}
+
+model Campaign {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  utmCampaign String
+  utmSource   String?
+  utmMedium   String?
+  startAt     DateTime?
+  endAt       DateTime?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  links Link[]
+
+  @@index([slug])
+  @@index([isActive])
+  @@map("campaigns")
+}
+
+model Link {
+  id         String      @id @default(cuid())
+  productId  String
+  campaignId String
+  marketplace Marketplace
+  shortCode  String      @unique
+  targetUrl  String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  clicks   Click[]
+
+  @@unique([productId, campaignId, marketplace])
+  @@index([shortCode])
+  @@index([productId])
+  @@index([campaignId])
+  @@map("links")
+}
+
+model Click {
+  id        String   @id @default(cuid())
+  linkId    String
+  timestamp DateTime @default(now())
+  referrer  String?
+  userAgent String?
+  ipHash    String?
+
+  link Link @relation(fields: [linkId], references: [id], onDelete: Cascade)
+
+  @@index([linkId])
+  @@index([timestamp])
+  @@map("clicks")
+}
+

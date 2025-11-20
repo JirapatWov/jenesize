@@ -1,0 +1,50 @@
+services:
+  # Backend API
+  - type: web
+    name: affiliate-api
+    runtime: node
+    region: singapore
+    plan: free
+    buildCommand: cd ../.. && pnpm install && pnpm --filter @affiliate/types build && pnpm --filter @affiliate/database build && pnpm --filter @affiliate/adapters build && cd apps/api && pnpm build
+    startCommand: cd apps/api && node dist/main.js
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 1h
+      - key: REFRESH_TOKEN_SECRET
+        generateValue: true
+      - key: REFRESH_TOKEN_EXPIRES_IN
+        value: 7d
+      - key: WEB_URL
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: affiliate-redis
+          property: connectionString
+
+  # Redis Cache
+  - type: redis
+    name: affiliate-redis
+    region: singapore
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
+
+databases:
+  # Note: Render PostgreSQL is paid. Use Supabase instead (free tier available)
+  # If you want to use Render's PostgreSQL instead of Supabase, uncomment below:
+  # - name: affiliate-db
+  #   databaseName: affiliate_db
+  #   user: affiliate_user
+  #   region: singapore
+  #   plan: free
+

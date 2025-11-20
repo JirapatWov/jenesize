@@ -1,0 +1,34 @@
+{
+  "name": "jenosize-affiliate-platform",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"./apps/*\" dev",
+    "dev:api": "pnpm --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "build": "pnpm --recursive build",
+    "build:api": "pnpm --filter api build",
+    "build:web": "pnpm --filter web build",
+    "lint": "pnpm --recursive lint",
+    "test": "pnpm --recursive test",
+    "clean": "pnpm --recursive clean",
+    "db:generate": "pnpm --filter database db:generate",
+    "db:push": "pnpm --filter database db:push",
+    "db:migrate": "pnpm --filter database db:migrate",
+    "db:seed": "pnpm --filter database db:seed",
+    "db:studio": "pnpm --filter database db:studio",
+    "docker:up": "docker-compose -f infra/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f infra/docker-compose.yml down",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
+
