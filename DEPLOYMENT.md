@@ -94,7 +94,7 @@ In Render dashboard, go to **Environment** tab and add:
 
 ```bash
 # Database
-DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
+DATABASE_URL=postgresql://affiliate_bn63_user:DHYpQAsa49LF7xTxqGYyhHatHZrUWjKw@dpg-d4flqb8dl3ps73d23gc0-a.singapore-postgres.render.com/affiliate_bn63
 
 # JWT
 JWT_SECRET=your-super-secret-jwt-key-here-change-this-in-production
@@ -108,10 +108,10 @@ API_PORT=10000
 WEB_URL=https://your-app.vercel.app
 
 # Redis (Render Redis)
-REDIS_HOST=your-redis-instance.render.com
+REDIS_HOST=red-d4flvb6r433s73cveku0.render.com
 REDIS_PORT=6379
 REDIS_PASSWORD=your-redis-password
-REDIS_URL=redis://:your-redis-password@your-redis-instance.render.com:6379
+REDIS_URL=redis://red-d4flvb6r433s73cveku0:6379
 ```
 
 **Note:** For Redis, you need to create a separate Redis instance on Render:

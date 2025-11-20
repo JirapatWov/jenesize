@@ -5,8 +5,16 @@ services:
     runtime: node
     region: singapore
     plan: free
-    buildCommand: cd ../.. && pnpm install && pnpm --filter @affiliate/types build && pnpm --filter @affiliate/database build && pnpm --filter @affiliate/adapters build && cd apps/api && pnpm build
-    startCommand: cd apps/api && node dist/main.js
+    buildCommand: |
+      pnpm install
+      pnpm --filter @affiliate/types clean || true
+      pnpm --filter @affiliate/types build
+      pnpm --filter @affiliate/database clean || true
+      pnpm --filter @affiliate/database build
+      pnpm --filter @affiliate/adapters clean || true
+      pnpm --filter @affiliate/adapters build
+      pnpm --filter api build
+    startCommand: node apps/api/dist/main.js
     healthCheckPath: /
     envVars:
       - key: NODE_ENV
